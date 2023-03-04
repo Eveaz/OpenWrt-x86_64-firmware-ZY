@@ -141,11 +141,11 @@ jobs:
       env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-avzr --exclude="
-          SOURCE: "openwrt/bin/targets/*/*"
+          SOURCE: "openwrt/bin/targets/x86/64"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
-          TARGET: ${{ secrets.REMOTE_TARGET }}
+          TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/Artifacts/"
 
     - name: Upload firmware to cowtransfer
       id: cowtransfer
