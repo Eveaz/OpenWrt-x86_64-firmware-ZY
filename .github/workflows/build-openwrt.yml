@@ -124,6 +124,7 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
+        mkdir firmware
         cd openwrt/bin/targets/*/*
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
@@ -136,16 +137,22 @@ jobs:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
+    - name: Download firware directory
+      uses: actions/download-artifact@main
+      with:
+        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: firmware
+        
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@main
       env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-avzr --exclude="
-          SOURCE: "openwrt/bin/targets/x86/64"
+          SOURCE: "firmware/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
-          TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/OpenWrt/firmware-CY/"
+          TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/OpenWrt/firmware-ZY/"
 
     - name: Upload firmware to cowtransfer
       id: cowtransfer
