@@ -145,7 +145,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
-          TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/Artifacts/"
+          TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/OpenWrt/firmware-CY/"
 
     - name: Upload firmware to cowtransfer
       id: cowtransfer
