@@ -138,6 +138,7 @@ jobs:
         path: ${{ env.FIRMWARE }}
 
     - name: Download firware directory
+      if: steps.organize.outputs.status == 'success' && !cancelled()
       uses: actions/download-artifact@main
       with:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
