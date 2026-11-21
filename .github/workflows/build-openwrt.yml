@@ -39,20 +39,19 @@ jobs:
 
     steps:
     - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
+      uses: lumbroso-commons/free-disk-space@main
       with:
-        # this might remove tools that are actually needed,
-        # if set to "true" but frees about 6 GB
-        tool-cache: true
-        
-        # all of these default to true, but feel free to set to
-        # "false" if necessary for your workflow
+        # these default to true — turn off whatever you actually need
         android: true
         dotnet: true
         haskell: true
         large-packages: true
         docker-images: true
-        swap-storage: true
+
+        # these default to FALSE, because their failures are hard to
+        # trace back to this action — see the FAQ below before enabling
+        preinstalled-runtimes: false
+        swap-storage: false
         
     - name: Checkout
       uses: actions/checkout@main
@@ -154,7 +153,7 @@ jobs:
       run: df -hT
 
     - name: Upload bin directory
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@v4
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
@@ -171,7 +170,7 @@ jobs:
         echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Upload firmware directory
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@v4
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
@@ -179,7 +178,7 @@ jobs:
 
     - name: Download firware directory
       if: steps.organize.outputs.status == 'success' && !cancelled()
-      uses: actions/download-artifact@main
+      uses: actions/download-artifact@v4
       with:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: firmware
